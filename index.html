@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="
+width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no
+">
+
+<title>SISTEMA DE ESTOQUE</title>
+
+<!-- PWA -->
+<link rel="manifest"
+href="manifest.json">
+
+<meta name="theme-color"
+content="#111111">
+
+<link rel="apple-touch-icon"
+href="icons/icon-192.png">
+
+
+<base href="./">
+<link rel="stylesheet" href="./css/tema.css">
+
+<style>
+
+input{
+width:100%;
+padding:14px;
+margin-top:10px;
+border:none;
+border-radius:12px;
+}
+
+.box{
+background:#1f1f1f;
+padding:16px;
+border-radius:14px;
+margin-top:15px;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>SISTEMA DE ESTOQUE</h1>
+
+<div id="conteudo"></div>
+
+</div>
+
+
+<script>
+
+
+window.onload=
+function(){
+
+registrarPWA();
+
+verificarAcesso();
+
+};
+
+
+
+//==========================
+// REGISTRO PWA
+//==========================
+function registrarPWA(){
+
+if(
+"serviceWorker"
+in navigator
+){
+
+window.addEventListener(
+"load",
+function(){
+
+navigator.serviceWorker.register(
+"./sw.js"
+)
+.then(()=>{
+
+console.log(
+"PWA ativo"
+);
+
+})
+.catch(err=>{
+
+console.log(
+err
+);
+
+});
+
+});
+
+}
+
+}
+
+
+
+//==========================
+function verificarAcesso(){
+
+let acessoCriado=
+localStorage.getItem(
+"acessoCriado"
+);
+
+
+if(
+!acessoCriado
+){
+
+telaCadastroInicial();
+
+}
+else{
+
+telaLogin();
+
+}
+
+}
+
+
+
+//==========================
+function telaCadastroInicial(){
+
+document
+.getElementById(
+"conteudo"
+).innerHTML=
+`
+
+<div class="box">
+
+<h2>
+PRIMEIRO ACESSO
+</h2>
+
+<input
+id="email"
+placeholder="EMAIL">
+
+<input
+type="password"
+id="senha"
+placeholder="SENHA">
+
+<input
+type="password"
+id="confirmar"
+placeholder="CONFIRMAR SENHA">
+
+<button onclick="
+salvarPrimeiroAcesso()
+">
+SALVAR ACESSO
+</button>
+
+</div>
+
+`;
+
+}
+
+
+
+//==========================
+function salvarPrimeiroAcesso(){
+
+let email=
+document
+.getElementById(
+"email"
+).value.trim();
+
+let senha=
+document
+.getElementById(
+"senha"
+).value.trim();
+
+let confirmar=
+document
+.getElementById(
+"confirmar"
+).value.trim();
+
+
+
+if(
+!email ||
+!senha ||
+!confirmar
+){
+alert(
+"Preencha todos campos"
+);
+return;
+}
+
+
+if(
+senha!==confirmar
+){
+alert(
+"Senhas diferentes"
+);
+return;
+}
+
+
+
+// perfil para editar perfil
+localStorage.setItem(
+"usuarioPerfil",
+
+JSON.stringify({
+
+email:email,
+senha:senha
+
+})
+
+);
+
+
+localStorage.setItem(
+"loginEmail",
+email
+);
+
+localStorage.setItem(
+"loginSenha",
+senha
+);
+
+localStorage.setItem(
+"acessoCriado",
+"sim"
+);
+
+
+alert(
+"Acesso criado"
+);
+
+
+telaLogin();
+
+}
+
+
+
+//==========================
+function telaLogin(){
+
+let email=
+localStorage.getItem(
+"loginEmail"
+);
+
+
+document
+.getElementById(
+"conteudo"
+).innerHTML=
+`
+
+<div class="box">
+
+<h2>
+LOGIN
+</h2>
+
+EMAIL:
+<br>
+
+<strong>
+${email}
+</strong>
+
+<input
+type="password"
+id="senhaLogin"
+placeholder="DIGITE SUA SENHA">
+
+<button onclick="
+entrar()
+">
+ENTRAR
+</button>
+
+
+<button onclick="
+resetarAcesso()
+">
+RESETAR ACESSO
+</button>
+
+</div>
+
+`;
+
+}
+
+
+
+//==========================
+function entrar(){
+
+let senha=
+document
+.getElementById(
+"senhaLogin"
+).value;
+
+let senhaSalva=
+localStorage.getItem(
+"loginSenha"
+);
+
+
+if(
+senha!==senhaSalva
+){
+alert(
+"Senha incorreta"
+);
+return;
+}
+
+
+localStorage.setItem(
+"usuarioLogado",
+"OPERADOR"
+);
+
+localStorage.setItem(
+"perfilAtual",
+"estoquista"
+);
+
+
+window.location.href=
+"menu.html";
+
+}
+
+
+
+//==========================
+function resetarAcesso(){
+
+if(
+!confirm(
+"Apagar login salvo?"
+)
+)return;
+
+
+localStorage.removeItem(
+"loginEmail"
+);
+
+localStorage.removeItem(
+"loginSenha"
+);
+
+localStorage.removeItem(
+"acessoCriado"
+);
+
+localStorage.removeItem(
+"usuarioPerfil"
+);
+
+
+location.reload();
+
+}
+
+</script>
+
+</body>
+</html>

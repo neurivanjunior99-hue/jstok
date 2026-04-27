@@ -14,15 +14,12 @@ user-scalable=no
 <title>SISTEMA DE ESTOQUE</title>
 
 <!-- PWA -->
-<link rel="manifest"
-href="manifest.json">
+<link rel="manifest" href="manifest.json">
 
-<meta name="theme-color"
-content="#111111">
+<meta name="theme-color" content="#111111">
 
 <link rel="apple-touch-icon"
 href="icons/icon-192.png">
-
 
 <base href="./">
 <link rel="stylesheet" href="./css/tema.css">
@@ -60,16 +57,12 @@ margin-top:15px;
 
 <script>
 
-
-window.onload=
-function(){
+window.onload=function(){
 
 registrarPWA();
-
 verificarAcesso();
 
 };
-
 
 
 //==========================
@@ -78,8 +71,7 @@ verificarAcesso();
 function registrarPWA(){
 
 if(
-"serviceWorker"
-in navigator
+"serviceWorker" in navigator
 ){
 
 window.addEventListener(
@@ -98,9 +90,7 @@ console.log(
 })
 .catch(err=>{
 
-console.log(
-err
-);
+console.log(err);
 
 });
 
@@ -119,7 +109,6 @@ let acessoCriado=
 localStorage.getItem(
 "acessoCriado"
 );
-
 
 if(
 !acessoCriado
@@ -400,8 +389,3 @@ location.reload();
 
 </body>
 </html>
-<script>
-if ('serviceWorker' in navigator) {
-navigator.serviceWorker.register('./sw.js');
-}
-</script>
